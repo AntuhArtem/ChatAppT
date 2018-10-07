@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class LoginController: UIViewController {
 
@@ -20,17 +22,56 @@ class LoginController: UIViewController {
         return view
     }()
     
-    let loginRegisterButton: UIButton = {
+    lazy var loginRegisterButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 80, g: 101, b: 161)
         button.setTitle("Register", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        button.addTarget(self, action: #selector(handleRegister), for: UIControl.Event.touchUpInside)
+        
         return button
     }()
     
-    
+    @objc func handleRegister() {
+        guard let email = emailTextField.text,
+                let password = passwordTextField.text,
+                  let name = nameTextField.text
+            else {
+            print("form is not valid")
+            return
+        }
+        
+        Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
+            if error != nil {
+                print(error)
+                return
+            }
+            
+            guard let uid = user?.user.uid else {
+                return
+            }
+                
+            //successfully auth user
+            let ref = Database.database().reference(fromURL: "https://chatapp-a0be7.firebaseio.com/")
+            let usersReference = ref.child("users").child(uid)
+            let values = ["name" : self.nameTextField.text, "email" : email] as [String : Any]
+            ref.updateChildValues(values, withCompletionBlock: {(err, ref) in
+                
+                if err != nil {
+                    print(err)
+                    return
+                }
+                
+                print("Saved user succesfully into DB")
+            })
+
+            
+            
+        })
+    }
     
     //name
     let nameTextField: UITextField = {
@@ -166,3 +207,7 @@ extension UIColor {
     self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
     }
 }
+
+
+
+
