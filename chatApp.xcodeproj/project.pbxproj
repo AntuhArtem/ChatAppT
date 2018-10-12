@@ -76,7 +76,6 @@
 			children = (
 				839D86562162C7EC00493DFB /* Controller */,
 				839D86432162C47F00493DFB /* AppDelegate.swift */,
-				839D86452162C47F00493DFB /* ViewController.swift */,
 				839D86472162C47F00493DFB /* Main.storyboard */,
 				839D864A2162C48200493DFB /* Assets.xcassets */,
 				839D864C2162C48200493DFB /* LaunchScreen.storyboard */,
@@ -90,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				839D86572162C82400493DFB /* LoginController.swift */,
+				839D86452162C47F00493DFB /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
